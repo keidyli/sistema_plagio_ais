@@ -70,6 +70,10 @@ router.get('/principal', protectRoute, (req, res) => {
     });
 });
 
+router.get('/nuevo', (req, res) => {
+  res.render('admin/nuevo');
+});
+
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
   res.clearCookie('jwt'); // Eliminar cookie

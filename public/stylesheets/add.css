@@ -1,0 +1,205 @@
+:root {
+    --blanco: #FFFFFF;
+    --negro: #061c15;
+    --azul: #218a96;
+    --rosado: #f390b8;
+    --rosaClaro: #dfab9e;
+    --cafe: #e8e8c5;
+    --marron: #6e3118;
+    --gris: #f8f3f3;
+    --grisOscuro: #8d8d8d;
+  }
+
+body{
+    background: var(--gris);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+.container-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 780px;
+    background-color: var(--blanco);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 6px;
+}
+
+.container{
+    display: flex;
+            height: 900px;
+    width: 1400px;
+    gap: 80px;
+    justify-content: center;
+    align-items: center;
+
+}
+.btn {
+    background: var(--azul);
+    color: var(--blanco);
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    height: 40px;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    
+}.btn:hover {
+    background: var(--blanco);
+    color: var(--azul);
+    border: 3px solid var(--azul);
+    transition: 0.5s;
+  }
+legend {
+    font-size: 20px;
+    justify-content: center;
+    background: var(--azul);
+    text-align: center;
+    align-items: center;
+    color: var(--blanco);
+    font-family: 'Roboto Condensed';	
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 90px;
+    width: 300px;
+    display: flex;
+    height: 40px;
+    margin-bottom: 15px;
+}
+label{
+   font-size: 14px;
+   display: flex;
+   margin-left: 50px;
+   font-family:'Roboto Condensed' ;
+   color: var(--grisOscuro);
+
+}
+
+
+.content-input{
+    display: flex;
+    width: 500px;
+    gap: 10px;
+    height: 650px;
+    flex-direction: column;
+    border-radius: 20px;
+
+}
+.content-input input{
+    display: flex;
+   margin-left: 50px;
+    height: 30px;
+    width: 400px;
+    border-radius: 3px;
+    border: none;
+    border-bottom: 1px solid var(--rosado);
+}
+
+.main-header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-family: 'Roboto Condensed';
+    color: var(--azul);
+    text-align: center;
+    border-radius: 0px 0px 20px 20px;
+    /* ... tus estilos actuales ... */
+    position: relative; /* Agrega esto para que el pseudo-elemento se posicione correctamente */
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: -1; /* Asegura que el pseudo-elemento esté detrás del contenido */
+
+}
+.regresar{	
+    color: var(--azul);
+    text-decoration: none;
+    font-family: 'Roboto Condensed';
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid var(--azul);
+    padding: 5px 10px;
+    margin-left: 10px;
+    margin-right: 10px; 
+}
+.regresar:hover{
+    background-color: var(--azul);
+    color: var(--blanco);
+    transition: 0.5s;
+}
+.main-header nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.main-header nav ul li a {
+    color: var(--azul);
+    text-decoration: none;
+}
+.container-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 4px;
+}
+
+.options {
+    padding: 6px;
+    border-radius: 5px;
+    text-decoration: none;
+
+    color: white;
+    font-weight: 600;
+    font-family: 'Roboto Condensed';
+}
+
+.options:hover {
+    background-color: white ;
+    color: rgb(0, 0, 0);
+}
+
+.edit {
+    background-color: rgb(32, 175, 32);
+    font-family: 'Roboto Condensed';
+    color: white;
+    cursor: pointer;
+}
+.edit:hover {
+    color: rgb(32, 175, 32);
+    border: 1px solid rgb(32, 175, 32);
+    background: var(--blanco);
+    transition: 0.5s;
+}
+
+.ver {
+    background-color: rgb(92, 89, 245);
+    font-family: 'Roboto Condensed';
+    color: white;
+    cursor: pointer;
+}
+.ver:hover {
+    transition: 0.5s;
+    color: rgb(92, 89, 245);
+    border: 1px solid rgb(92, 89, 245);
+    background: var(--blanco);
+}
+nav{
+    font-family: 'Roboto Condensed';
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
