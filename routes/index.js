@@ -70,9 +70,23 @@ router.get('/principal', protectRoute, (req, res) => {
     });
 });
 
-router.get('/nuevo', (req, res) => {
-  res.render('admin/nuevo');
+router.get('/add', protectRoute, (req, res) => {
+  res.render('add');
 });
+
+router.post('/add', (req, res) => {
+  const {cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor} = req.body;
+  main
+    .nuevoProyecto(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+    .then(() => {
+      res.redirect('/principal')
+    })
+    .catch(err => {
+      console.error("Error en nuevoProyecto:", err); // Mejorar el logging del error
+      res.status(500).send("Error al agregar el proyecto"); // Enviar una respuesta de error al cliente
+    });
+}); 
+
 
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
