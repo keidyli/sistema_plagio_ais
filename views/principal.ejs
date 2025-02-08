@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Principal</title>
+    <link rel="stylesheet" href="stylesheets/principal.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    <header class="header-page">
+        <section class="profile">
+            <a href="/logout">Cerrar sesión</a>
+        </section>
+    </header>
+    <main>
+        <div class="panel">
+
+            <div class="profile-avatar">
+                <img src="https://www.pngarts.com/files/3/Avatar-PNG-Download-Image.png" alt="random">
+                <p class="font-size">
+                </p>
+                <p>
+         
+                </p>
+            </div>
+            
+            <div class="information">
+                    <a href="/usuarios">
+                        <li class="fa fa-user"></li>Usuarios
+                    </a>
+                
+            </div>
+            <div class="information">
+                <a href="/vehiculos">
+                    <li class="fa fa-car"></li>Vehículos
+                </a>
+            </div>
+            <div class="information">
+                    <a href="/auditoria">
+                        <li class="fa fa-book"></li>Auditoría
+                    </a>
+            </div>
+        </div>
+
+            <div class="content-father">
+                <div class="content-child">
+                    <div class="title">
+                        <div class="lista">Lista </div>
+                        <div class="de">de </div>
+                        <div class="usuarios">Proyectos</div>
+                    </div>
+                    <div class="button">
+                        <a href="/vehiculos/agregar" class="button_add">
+                            <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 45.402 45.402"
+                                xml:space="preserve">
+                                <g>
+                                    <path d="M41.267,18.557H26.832V4.134C26.832,1.851,24.99,0,22.707,0c-2.283,0-4.124,1.851-4.124,4.135v14.432H4.141
+            c-2.283,0-4.139,1.851-4.138,4.135c-0.001,1.141,0.46,2.187,1.207,2.934c0.748,0.749,1.78,1.222,2.92,1.222h14.453V41.27
+            c0,1.142,0.453,2.176,1.201,2.922c0.748,0.748,1.777,1.211,2.919,1.211c2.282,0,4.129-1.851,4.129-4.133V26.857h14.435
+            c2.283,0,4.134-1.867,4.133-4.15C45.399,20.425,43.548,18.557,41.267,18.557z" />
+                                </g>
+                            </svg>
+                            <span>Agregar info</span>
+                        </a>
+                    </div>
+                    <div class="father-table_content">
+                        <form action="/search" style="display: flex;  align-items: start; gap: 5px;" method="POST">
+                            <div class="input-content">
+                                <input type="text" id="cd4_cedula" name="buscar" style="margin-bottom: 1.2rem;"
+                                    autocomplete="off" placeholder="Ejemplo: 8741520...">
+                                <label for="cedula" class="form-label" name>Buscar por campos</label>
+                            </div>
+                            <button
+                                style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Buscar
+                            </button>
+                            <button
+                               href="/vehiculos" style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Refrescar
+                            </button>
+                        </form>
+
+                        <% if(datos.length > 0){ %>
+                                <table class="table">
+                                    <thead class="tablehead_color">
+                                        <tr>
+                                            <th>C.I</th>
+                                            <th>Nombre</th>
+                                            <th>Título Proyecto</th>
+                                            <th>Periodo</th>
+                                            <th>Tutor</th>
+                                            <th>Contacto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tablebody_color">
+                                        <tr>
+                                             <% datos.forEach(d => { %>
+                                        <tr>
+                                            <td><%= d.cdi_estu %></td>
+                                            <td><%= d.name_estu %></td>
+                                            <td><%= d.title_project %></td>
+                                            <td><%= d.periodo %></td>
+                                            <td><%= d.name_tutor %></td>
+                                            <td><%= d.contact_tutor %></td>
+                                            <td class="buttons" style="height: 100px;">
+                                                <a href="/vehiculos/edit/<%= d.id %>" class="button_edit">
+                                                    <div class="img">
+                                                        <svg class="feather feather-edit" fill="none" height="24"
+                                                            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" viewBox="0 0 24 24" width="24"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <a href="/vehiculos/delete/<%= d.id %>" class="button_delete">
+                                                    <div class="img">
+                                                        <svg class="feather feather-trash-2" fill="none" height="24"
+                                                            stroke="currentColor" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                                            width="24" xmlns="http://www.w3.org/2000/svg">
+                                                            <polyline points="3 6 5 6 21 6" />
+                                                            <path
+                                                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                            <line x1="10" x2="10" y1="11" y2="17" />
+                                                            <line x1="14" x2="14" y1="11" y2="17" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                     
+                                            </tr>
+                                        <% }); %>
+                                        </tr>
+                                    </tbody>
+                                    <% } else { %>
+                                        <div class="empty-state">
+                                            <img src="/images/empty.svg" alt="Sin datos">
+                                            <p>No se encontraron registros</p>
+                                        </div>
+                                        <% } %>
+                                </table>
+                        </div>
+                    </div>
+            </div>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+          Swal.fire({
+            title: '¡Éxito!',
+            text: 'El vehículo ha sido eliminado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          }).then(() => {
+            const currentUrl = window.location.href.split('?')[0];
+            window.history.replaceState(null, null, currentUrl);
+          });
+        }
+      </script>
+
+    
+    
+    
+
+</body>
+
+</html>
