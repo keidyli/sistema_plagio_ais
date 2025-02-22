@@ -88,6 +88,34 @@ router.post('/add', (req, res) => {
 }); 
 
 
+//Mostrando vista de editar
+router.get('/editar/:id', protectRoute, (req, res) => {
+  const id = req.params.id;
+  main
+    .mostrarProyectoPorID(id)
+    .then(datos => {
+      res.render('editar', {datos:datos});
+    })
+    .catch(err => {
+      res.render('editar', {datos:{}});
+    });
+});
+
+
+//Obteniendo datos de la vista editar
+router.post('/editar', (req, res) => {
+  const {id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor} = req.body;
+  console.log(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+  main
+    .actualizarProyecto(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+    .then(() => {
+      res.redirect('/principal')
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
+
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
   res.clearCookie('jwt'); // Eliminar cookie

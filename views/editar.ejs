@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/add.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <!-- Google fonts-->
+    <title>EDIT_INFO</title>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Editar Informacion</h1>
+        <nav>
+            <ul>
+                <li><a  class="regresar" method="POST" href="/principal">Regresar</a></li>
+            </ul>
+        </nav>
+    </header>
+    <form id='formulario' action="/editar" method="post">
+    <div class="container" >
+        <div class="container-form">
+            <div class="content-input">
+                <% datos.forEach(d => { %>
+                <legend>Datos personales</legend>
+                <input type="hidden" name="id" value="<%= d.id %>">
+            <label  for="cedula">Cedula:</label>
+            <input type="type" id="cdi_estu" name="cdi_estu" required maxlength="15" value="<%= d.cdi_estu %>">
+          
+            <label  for="nombres">Nombre Completo:</label>
+            <input type="type" id="name_estu" name="name_estu" required maxlength="100" value="<%= d.name_estu %>">
+           
+            <label for="title" >Titulo del Proyecto:</label>
+            <input type="text" id="title_project" name="title_project" required value="<%= d.title_project %>">
+
+            <label for="periodo">Periodo:</label>
+            <input type="type" id="periodo" name="periodo" required maxlength="10" value="<%= d.periodo %>">
+
+            <label for="name_tutor" >Nombre del Tutor:</label>
+            <input type="type" id="name_tutor" name="name_tutor" required maxlength="100" value="<%= d.name_tutor %>">
+          
+            <label for="contact_tutor">Contacto del Tutor:</label>
+            <input type="type" id="contact_tutor" name="contact_tutor" required maxlength="100" value="<%= d.contact_tutor %>">
+            <% }); %>
+
+        </div>
+        <div class="container-btn">
+            <button href="/principal" type="submit" class="btn">Registrar</button>
+        </div>
+    </div>
+
+</form>
+
+</body>
+</html>

@@ -11,7 +11,8 @@
 
 CREATE TABLE IF NOT EXISTS data_one
     (
-        cdi_estu VARCHAR(15) NOT NULL PRIMARY KEY,
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        cdi_estu VARCHAR(15) NOT NULL,
         name_estu VARCHAR(100) NOT NULL,
         title_project TEXT NOT NULL,
         periodo VARCHAR (10) NOT NULL,  

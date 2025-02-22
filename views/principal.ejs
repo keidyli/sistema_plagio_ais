@@ -31,13 +31,13 @@
             
             <div class="information">
                     <a href="/usuarios">
-                        <li class="fa fa-user"></li>Usuarios
+                        <li class="fa fa-user"></li>Estadisticas
                     </a>
                 
             </div>
             <div class="information">
                 <a href="/vehiculos">
-                    <li class="fa fa-car"></li>Vehículos
+                    <li class="fa fa-car"></li>Verificador
                 </a>
             </div>
             <div class="information">
@@ -108,7 +108,7 @@
                                             <td><%= d.name_tutor %></td>
                                             <td><%= d.contact_tutor %></td>
                                             <td class="buttons" style="height: 100px;">
-                                                <a href="/vehiculos/edit/<%= d.id %>" class="button_edit">
+                                                <a href="/editar/<%= d.id %>" class="button_edit">
                                                     <div class="img">
                                                         <svg class="feather feather-edit" fill="none" height="24"
                                                             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -120,7 +120,7 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-                                                <a href="/vehiculos/delete/<%= d.id %>" class="button_delete">
+                                                <a href="/delete/<%= d.id %>" class="button_delete">
                                                     <div class="img">
                                                         <svg class="feather feather-trash-2" fill="none" height="24"
                                                             stroke="currentColor" stroke-linecap="round"

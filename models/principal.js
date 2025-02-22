@@ -8,7 +8,21 @@ const consultas = {
     
     mostrar_proyecto : "SELECT * FROM data_one",
 
-    nuevo_proyecto: "INSERT INTO data_one(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor) VALUES (?, ?, ?, ?, ?, ?);"
+    nuevo_proyecto: "INSERT INTO data_one(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor) VALUES (?, ?, ?, ?, ?, ?);",
+
+    mostrar_proyecto_por_id: "SELECT * FROM data_one WHERE id = ?",
+    
+    actualizar_proyecto: `UPDATE data_one SET 
+                            cdi_estu = ?,
+                            name_estu = ?,
+                            title_project = ?,
+                            periodo = ?,
+                            name_tutor = ?,
+                            contact_tutor = ?
+
+                            WHERE id = ?;`,
+    
+    eliminar_proyecto: "DELETE FROM productos WHERE id = ?;"
 
 };
 
@@ -32,6 +46,33 @@ module.exports = {
             });
         });
     },
+
+    mostrarProyectoPorID(id){
+        return new Promise((resolve, reject) => {
+            db.query(consultas.mostrar_proyecto_por_id, [id],(err, data) => {
+                if(err) reject(err);
+                resolve(data);
+            });
+        });
+    },
+
+    actualizarProyecto(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor){
+        return new Promise((resolve, reject) => {
+            db.query(consultas.actualizar_proyecto, [cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor, id], (err) => {
+                if(err) reject(err);
+                resolve();
+            });
+        })
+    },
+
+    eliminarProyecto(id){
+        return new Promise((resolve, reject)=>{
+            db.query(consultas.eliminar_proyecto, [id], (err) => {
+                if(err) reject(err);
+                resolve();
+            })
+        });
+    }
 
    
 }
