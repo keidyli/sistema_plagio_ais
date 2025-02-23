@@ -116,6 +116,20 @@ router.post('/editar', (req, res) => {
     });
 });
 
+
+router.get('/delete/:id', (req, res) => {
+  const id = req.params.id;
+  main
+    .eliminarProyecto(id)
+    .then(() => {
+      res.redirect('/principal')
+    })
+    .catch(err => {
+      res.send(err);
+    });
+}); 
+
+
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
   res.clearCookie('jwt'); // Eliminar cookie

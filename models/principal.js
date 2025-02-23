@@ -22,7 +22,7 @@ const consultas = {
 
                             WHERE id = ?;`,
     
-    eliminar_proyecto: "DELETE FROM productos WHERE id = ?;"
+    eliminar_proyecto: "DELETE FROM data_one WHERE id = ?;"
 
 };
 
