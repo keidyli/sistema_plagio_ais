@@ -27,18 +27,26 @@ router.get('/', (req, res) => {
 });
 
 // Ruta para procesar el login y manejar la logica
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Validar credenciales desde variables de entorno
-  if (username === process.env.NAME_USER && password === process.env.PASSWORD)
-  {
-    const token= jwt.sign({username}, process.env.JWT_SECRET, { expiresIn: '1h'}); // Credenciales correctas, genera un token
-    res.cookie('jwt', token, {httpOnly: true}); // Guarda el token en una cookie
-    return res.status(200).redirect('/principal');// Redirige a vista principal después del login
-     
+  try {
+    if (!username || !password) {
+      return res.status(400).send('Usuario y contraseña son requeridos');
+    }
+
+    // Validar credenciales desde variables de entorno
+    if (username === process.env.NAME_USER && password === process.env.PASSWORD) {
+      const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Credenciales correctas, genera un token
+      res.cookie('jwt', token, {httpOnly: true}); // Guarda el token en una cookie
+      return res.status(200).redirect('/principal'); // Redirige a vista principal después del login
+    }
+
+    res.status(401).send('Credenciales incorrectas');
+  } catch (error) {
+    console.error('Error durante el login:', error);
+    res.status(500).send('Error interno del servidor');
   }
-  res.status(401).send('Credenciales incorrectas');
 });
 
 // Middleware para proteger rutas
@@ -63,6 +71,7 @@ router.get('/principal', protectRoute, (req, res) => {
   main.mostrarProyecto()
     .then(datos => {
       res.render('principal', { datos: datos });
+      console.log("mostrando vista principal");
     })
     .catch(err => {
       console.error("Error al obtener proyectos:", err); // 👁️ ¡Agrega logs para debuggear!
@@ -122,7 +131,7 @@ router.get('/delete/:id', (req, res) => {
   main
     .eliminarProyecto(id)
     .then(() => {
-      res.redirect('/principal')
+      res.redirect('/principal?success=true')
     })
     .catch(err => {
       res.send(err);
