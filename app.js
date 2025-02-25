@@ -17,7 +17,8 @@ console.log("escuchando comunicaciones del puerto", app.set("port"));
 app.set('view engine', 'ejs');//definimos el motor de plantilla con archivos ejs
 app.set('views', path.join(__dirname, 'views'));//definimos la ruta del motor de plantilla
 
-
+// Servir archivos estáticos desde "node_modules/sweetalert2/dist"
+app.use('/sweetalert2', express.static(path.join(__dirname, 'node_modules', 'sweetalert2', 'dist')));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

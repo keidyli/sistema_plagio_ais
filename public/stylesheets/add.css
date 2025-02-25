@@ -1,3 +1,8 @@
+@font-face{
+	font-family:'fuenteNueva';
+	src:url(/fonts/ComicNeue-Regular.ttf);
+}
+
 :root {
     --blanco: #FFFFFF;
     --negro: #061c15;
@@ -45,7 +50,7 @@ body{
     color: var(--blanco);
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font: 20px 'fuenteNueva';
     height: 40px;
     padding: 10px;
     margin-top: 40px;
@@ -59,30 +64,27 @@ body{
     transition: 0.5s;
   }
 legend {
-    font-size: 20px;
     justify-content: center;
     background: var(--azul);
     text-align: center;
     align-items: center;
     color: var(--blanco);
-    font-family: 'Roboto Condensed';	
+    font: 25px 'fuenteNueva';
     padding: 5px 10px;
     border-radius: 5px;
     margin-left: 90px;
     width: 300px;
     display: flex;
     height: 40px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 label{
-   font-size: 14px;
+   font: 18px 'fuenteNueva';
    display: flex;
    margin-left: 50px;
-   font-family:'Roboto Condensed' ;
    color: var(--grisOscuro);
 
 }
-
 
 .content-input{
     display: flex;
@@ -91,7 +93,6 @@ label{
     height: 550px;
     flex-direction: column;
     border-radius: 20px;
-    margin-top: 30px;
 
 }
 .content-input input{
@@ -108,12 +109,11 @@ label{
     display: flex;
     justify-content: center;
     width: 100%;
-    font-family: 'Roboto Condensed';
+    font: 18px 'fuenteNueva';
     color: var(--azul);
     text-align: center;
     border-radius: 0px 0px 20px 20px;
-    /* ... tus estilos actuales ... */
-    position: relative; /* Agrega esto para que el pseudo-elemento se posicione correctamente */
+    position: relative; 
 }
 
 header::before {
@@ -129,8 +129,7 @@ header::before {
 .regresar{	
     color: var(--azul);
     text-decoration: none;
-    font-family: 'Roboto Condensed';
-    font-size: 16px;
+    font: 18px 'fuenteNueva';
     border-radius: 5px;
     border: 2px solid var(--azul);
     padding: 5px 10px;
@@ -158,49 +157,13 @@ header::before {
     padding-bottom: 4px;
 }
 
-.options {
-    padding: 6px;
-    border-radius: 5px;
-    text-decoration: none;
-
-    color: white;
-    font-weight: 600;
-    font-family: 'Roboto Condensed';
-}
-
-.options:hover {
-    background-color: white ;
-    color: rgb(0, 0, 0);
-}
-
-.edit {
-    background-color: rgb(32, 175, 32);
-    font-family: 'Roboto Condensed';
-    color: white;
-    cursor: pointer;
-}
-.edit:hover {
-    color: rgb(32, 175, 32);
-    border: 1px solid rgb(32, 175, 32);
-    background: var(--blanco);
-    transition: 0.5s;
-}
-
-.ver {
-    background-color: rgb(92, 89, 245);
-    font-family: 'Roboto Condensed';
-    color: white;
-    cursor: pointer;
-}
-.ver:hover {
-    transition: 0.5s;
-    color: rgb(92, 89, 245);
-    border: 1px solid rgb(92, 89, 245);
-    background: var(--blanco);
-}
 nav{
     font-family: 'Roboto Condensed';
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+input{
+    font: 16px 'fuenteNueva';
 }

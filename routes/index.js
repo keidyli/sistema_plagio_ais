@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const router = express.Router();
 const main = require('../models/principal');
+const db = require("../data/db");
 
 /*
 const { getConnection } = require("../data/db");  // Asegúrate de la ruta correcta
@@ -25,6 +26,8 @@ router.get("/test-db", async (req, res) => {
 router.get('/', (req, res) => {
   res.render('index'); // Renderiza index.ejs desde la carpeta views
 });
+
+
 
 // Ruta para procesar el login y manejar la logica
 router.post('/login', async (req, res) => {
@@ -88,11 +91,11 @@ router.post('/add', (req, res) => {
   main
     .nuevoProyecto(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
     .then(() => {
-      res.redirect('/principal')
+      res.redirect('/principal?action=add&success=true'); // Redirigir con acción de agregar
     })
     .catch(err => {
       console.error("Error en nuevoProyecto:", err); // Mejorar el logging del error
-      res.status(500).send("Error al agregar el proyecto"); // Enviar una respuesta de error al cliente
+      res.redirect('/principal?action=add&error=1'); // Redirigir con acción de agregar y error
     });
 }); 
 
@@ -131,12 +134,40 @@ router.get('/delete/:id', (req, res) => {
   main
     .eliminarProyecto(id)
     .then(() => {
-      res.redirect('/principal?success=true')
+      res.redirect('/principal?action=delete&success=true'); // Redirigir con acción de eliminar
     })
     .catch(err => {
-      res.send(err);
+      res.redirect('/principal?action=delete&error=1'); // Redirigir con acción de eliminar y error
     });
 }); 
+
+
+router.post('/search', protectRoute, (req, res) => {
+  const buscar = req.body.buscar || '';
+  const limit = 30;
+  let query = 'SELECT * FROM data_one WHERE 1=1';
+  let queryParams = [];
+
+  if (buscar.trim() !== '') {
+    // Si se manda un término de búsqueda, se agregan las condiciones
+    query += ' AND (cdi_estu LIKE ? OR name_estu LIKE ? OR title_project LIKE ? OR periodo LIKE ? OR name_tutor LIKE ? OR contact_tutor LIKE ?)';
+    queryParams.push(`%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`);
+  } else {
+    // Si el campo de búsqueda está vacío, se agrega el LIMIT
+    query += ' LIMIT ?';
+    queryParams.push(limit);
+  }
+
+  db.query(query, queryParams, (err, row) => {
+    if (err) {
+      return res.status(500).send("Error en la consulta");
+    }
+
+    res.render('principal', {
+      datos: row
+    });
+  });
+});
 
 
 // Ruta para cerrar sesión

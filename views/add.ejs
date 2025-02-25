@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/stylesheets/add.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-        <!-- Google fonts-->
+        
     <title>ADD_INFO</title>
 </head>
 <body>
     <header class="main-header">
-        <h1>Formulario de llenado de Informacion</h1>
+        <h1>Registro de Nueva Informacion</h1>
         <nav>
             <ul>
                 <li><a  class="regresar" method="POST" href="/principal">Regresar</a></li>
             </ul>
         </nav>
     </header>
-    <form id='formulario' action="/add" method="post">
+    <form id='formulario' action="/add" method="post" id="addForm">
     <div class="container" >
         <div class="container-form">
             <div class="content-input">
@@ -52,5 +52,24 @@
 
 </form>
 
+<script>
+    document.getElementById("addForm").addEventListener("submit", async function (e) {
+        e.preventDefault(); // Evita el envío tradicional del formulario
+    // Verificar si hay un parámetro de éxito en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'El proyecto ha sido agregado correctamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      }).then(() => {
+        // Limpiar la URL después de mostrar la alerta
+        const currentUrl = window.location.href.split('?')[0];
+        window.history.replaceState(null, null, currentUrl);
+      });
+    }
+});
+  </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="stylesheets/principal.css">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v5.15.4/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css">
 
 </head>
 <body>
@@ -80,7 +80,7 @@
                                 style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Buscar
                             </button>
                             <button
-                               href="/vehiculos" style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Refrescar
+                               href="/principal" style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Refrescar
                             </button>
                         </form>
 
@@ -120,7 +120,7 @@
                                                         </svg>
                                                     </div>
                                                 </a>
-                                                <a href="/delete/<%= d.id %>" class="button_delete">
+                                                <a href="#" class="button_delete"  data-id="<%= d.id %>">
                                                     <div class="img">
                                                         <svg class="feather feather-trash-2" fill="none" height="24"
                                                             stroke="currentColor" stroke-linecap="round"
@@ -152,25 +152,91 @@
             </div>
     </main>
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('success') === 'true') {
-          Swal.fire({
-            title: '¡Éxito!',
-            text: 'El proyecto ha sido eliminado correctamente.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-          }).then(() => {
-            const currentUrl = window.location.href.split('?')[0];
-            window.history.replaceState(null, null, currentUrl);
-          });
-        }
-      </script>
+<script src="/sweetalert2/sweetalert2.min.js"></script>
+<script>
+  // Verificar si hay parámetros en la URL
+  const urlParams = new URLSearchParams(window.location.search);
 
-    
-    
+  // Obtener los valores de los parámetros
+  const action = urlParams.get('action'); // 'delete' o 'add'
+  const success = urlParams.get('success'); // 'true' o null
+  const error = urlParams.get('error'); // '1' o null
+
+  // Mostrar alertas según la acción y el resultado
+  if (success === 'true') {
+    let title, text;
+
+    if (action === 'delete') {
+      title = '¡Éxito!';
+      text = 'El proyecto ha sido eliminado correctamente.';
+    } else if (action === 'add') {
+      title = '¡Éxito!';
+      text = 'El proyecto ha sido agregado correctamente.';
+    }
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'success',
+      confirmButtonText: 'Aceptar'
+    }).then(() => {
+      // Limpiar la URL después de mostrar la alerta
+      const currentUrl = window.location.href.split('?')[0];
+      window.history.replaceState(null, null, currentUrl);
+    });
+  }
+
+  if (error) {
+    let title, text;
+
+    if (action === 'delete') {
+      title = 'Error';
+      text = 'Hubo un problema al eliminar el proyecto.';
+    } else if (action === 'add') {
+      title = 'Error';
+      text = 'Hubo un problema al agregar el proyecto.';
+    }
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    }).then(() => {
+      // Limpiar la URL después de mostrar la alerta
+      const currentUrl = window.location.href.split('?')[0];
+      window.history.replaceState(null, null, currentUrl);
+    });
+  }
+
+  // Lógica para manejar la eliminación de proyectos
+  document.querySelectorAll('.button_delete').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault(); // Evitar la redirección predeterminada
+
+      // Obtener el ID del proyecto
+      const projectId = this.getAttribute('data-id');
+
+      // Mostrar la ventana de confirmación
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Quieres eliminar este proyecto? Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Si el usuario confirma, redirigir a la URL de eliminación
+          window.location.href = `/delete/${projectId}`;
+        }
+      });
+    });
+  });
+      </script>
     
 
 </body>
-
 </html>
