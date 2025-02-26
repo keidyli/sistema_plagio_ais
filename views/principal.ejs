@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +51,7 @@
                     <div class="title">
                         <div class="lista">Lista </div>
                         <div class="de">de </div>
-                        <div class="usuarios">Proyectos</div>
+                        <div class="proyectos">Proyectos</div>
                     </div>
                     <div class="button">
                         <a href="/add" class="button_add">
@@ -76,12 +75,8 @@
                                     autocomplete="off" placeholder="Ejemplo: 8741520...">
                                 <label for="cedula" class="form-label" name>Buscar por campos</label>
                             </div>
-                            <button
-                                style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Buscar
-                            </button>
-                            <button
-                               href="/principal" style="margin-top: .2rem; cursor: pointer; padding: .3rem; border-radius: 4px;  border: 0; color: white; background-color: rgb(0, 64, 107);">Refrescar
-                            </button>
+                            <button class="boton_one">Buscar</button>
+                            <button class="boton_one" href="/principal" >Refrescar</button>
                         </form>
 
                         <% if(datos.length > 0){ %>
