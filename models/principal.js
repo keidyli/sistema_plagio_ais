@@ -11,6 +11,8 @@ const consultas = {
     nuevo_proyecto: "INSERT INTO data_one(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor) VALUES (?, ?, ?, ?, ?, ?);",
 
     mostrar_proyecto_por_id: "SELECT * FROM data_one WHERE id = ?",
+
+    obtener_titulos: "SELECT id, title_project, name_estu, cdi_estu FROM data_one",
     
     actualizar_proyecto: `UPDATE data_one SET 
                             cdi_estu = ?,
@@ -50,6 +52,15 @@ module.exports = {
     mostrarProyectoPorID(id){
         return new Promise((resolve, reject) => {
             db.query(consultas.mostrar_proyecto_por_id, [id],(err, data) => {
+                if(err) reject(err);
+                resolve(data);
+            });
+        });
+    },
+
+    obtenerTitulos(){
+        return new Promise((resolve, reject) => {
+            db.query(consultas.obtener_titulos, (err, data) => {
                 if(err) reject(err);
                 resolve(data);
             });

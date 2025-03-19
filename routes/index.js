@@ -4,30 +4,56 @@ require('dotenv').config();
 const router = express.Router();
 const main = require('../models/principal');
 const db = require("../data/db");
+const natural = require('natural');
+const stopword = require('stopword');
 
-/*
-const { getConnection } = require("../data/db");  // Asegúrate de la ruta correcta
+// Usar PorterStemmer en lugar de PorterStemmerEs para evitar problemas
+const stemmer = natural.PorterStemmer;
 
-// Ruta de prueba para verificar la conexión
-router.get("/test-db", async (req, res) => {
-    try {
-        const connection = await getConnection();
-        const result = await connection.query("SELECT 1 + 1 AS solution");
-        connection.end();  // Cerramos la conexión después de la consulta
-        res.json({ message: "✅ Conexión exitosa", resultado: result });
-    } catch (error) {
-        res.status(500).json({ message: "❌ Error en la conexión", error: error.message });
-    }
-});
-
+/**
+* Preprocesa el texto:
+* - Convierte a minúsculas
+* - Elimina signos de puntuación
+* - Separa palabras
+* - Elimina palabras vacías (stopwords)
+* - Aplica stemming
 */
+function preprocessText(text) {
+  text = text.toLowerCase();
+  text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Elimina tildes
+  text = text.replace(/[^\w\s]/g, ''); // Elimina signos de puntuación
+  let words = text.split(/\s+/);
+  words = stopword.removeStopwords(words, stopword.spa);
+  return words.join(' '); // No aplicamos stemming
+}
+
+/**
+* Calcula la similitud del coseno entre dos textos preprocesados.
+*/
+function calculateBagOfWordsSimilarity(text1, text2) {
+  const words1 = text1.split(' ');
+  const words2 = text2.split(' ');
+
+  // Crear un conjunto único de palabras
+  const allWords = new Set([...words1, ...words2]);
+
+  // Crear vectores binarios (1 si la palabra está, 0 si no)
+  const vector1 = Array.from(allWords).map(word => words1.includes(word) ? 1 : 0);
+  const vector2 = Array.from(allWords).map(word => words2.includes(word) ? 1 : 0);
+
+  // Calcular producto punto y magnitudes
+  const dotProduct = vector1.reduce((sum, val, i) => sum + val * vector2[i], 0);
+  const magnitude1 = Math.sqrt(vector1.reduce((sum, val) => sum + val * val, 0));
+  const magnitude2 = Math.sqrt(vector2.reduce((sum, val) => sum + val * val, 0));
+
+  return magnitude1 && magnitude2 ? dotProduct / (magnitude1 * magnitude2) : 0;
+}
+
 
 // Ruta para mostrar la vista de login
 router.get('/', (req, res) => {
   res.render('index'); // Renderiza index.ejs desde la carpeta views
 });
-
-
 
 // Ruta para procesar el login y manejar la logica
 router.post('/login', async (req, res) => {
@@ -169,6 +195,61 @@ router.post('/search', protectRoute, (req, res) => {
   });
 });
 
+
+// Muestra la vista de búsqueda
+router.get('/busqueda', protectRoute, (req, res) => {
+  res.render('antiPlagio');
+});
+
+// Manejando lógica de comparación de títulos
+router.post('/busqueda', protectRoute, async (req, res) => {
+  const tituloBusqueda = req.body.titulo;
+
+  try {
+      const tituloBusquedaProcesado = preprocessText(tituloBusqueda);
+
+      // Obtener solo los títulos y datos necesarios
+      const proyectos = await main.obtenerTitulos();
+
+      // Procesar todos los títulos en paralelo
+      const resultados = await Promise.all(
+          proyectos.map(async (proyecto) => {
+              const tituloProyectoProcesado = preprocessText(proyecto.title_project);
+              const similitud = calculateBagOfWordsSimilarity(tituloBusquedaProcesado, tituloProyectoProcesado);
+
+              if (similitud >= 0.6) {
+                  return {
+                      titulo: proyecto.title_project,
+                      estudiante: proyecto.name_estu,
+                      cedula: proyecto.cdi_estu,
+                      similitud: (similitud * 100).toFixed(2)
+                  };
+              }
+          })
+      );
+
+      // Filtrar valores nulos
+      const resultadosFiltrados = resultados.filter(res => res);
+
+      res.render('antiPlagio', { resultados: resultadosFiltrados });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al buscar proyectos');
+  }
+});
+
+
+// Pruebas manuales de preprocesamiento
+const prueba1 = "Sistema de gestión académica";
+const prueba2 = "Sistema de gestión académica";
+
+console.log("Texto original 1:", prueba1);
+console.log("Texto preprocesado 1:", preprocessText(prueba1));
+
+console.log("Texto original 2:", prueba2);
+console.log("Texto preprocesado 2:", preprocessText(prueba2));
+
+console.log("Similitud entre títulos:", calculateBagOfWordsSimilarity(preprocessText(prueba1), preprocessText(prueba2)));
 
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {

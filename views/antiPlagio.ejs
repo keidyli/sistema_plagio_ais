@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación de Títulos</title>
+    <link rel="stylesheet" href="/stylesheets/plagio.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Comparación de Títulos</h1>
+       
+        <!-- Barra de búsqueda -->
+        <form action="/busqueda" method="POST" class="search-form">
+            <input type="text" name="titulo" placeholder="Ingrese el título del proyecto" required>
+            <input type="number" name="umbral" step="0.01" min="0.5" max="1.0" value="<%= typeof umbral !== 'undefined' ? umbral : 0.8 %>" placeholder="Umbral de similitud">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <!-- Resultados -->
+        <% if (typeof resultados !== 'undefined') { %>
+            <% if (resultados.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Título del proyecto</th>
+                            <th>Nombre del estudiante</th>
+                            <th>Cédula</th>
+                            <th>Similitud</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% resultados.forEach(resultado => { %>
+                            <tr>
+                                <td><%= resultado.titulo %></td>
+                                <td><%= resultado.estudiante %></td>
+                                <td><%= resultado.cedula %></td>
+                                <td><%= resultado.similitud %>%</td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="no-results">No se encontraron proyectos con un nivel de similitud superior al 80%.</p>
+            <% } %>
+        <% } %>
+    </div>
+</body>
+</html>
