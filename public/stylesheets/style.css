@@ -1,4 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+
+@font-face{
+	font-family:'fuenteNueva';
+	src:url(/fonts/ComicNeue-Regular.ttf);
+}
 
 * {
   margin: 0;
@@ -8,7 +12,7 @@
 
 body,
 input {
-  font-family: "Poppins", sans-serif;
+  font: 17px 'fuenteNueva';
 }
 
 .container {
@@ -88,7 +92,7 @@ form.sign-in-form {
   border: none;
   line-height: 1;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 21px;
   color: #333;
 }
 
@@ -96,7 +100,6 @@ form.sign-in-form {
   color: #aaa;
   font-weight: 500;
 }
-
 
 .btn {
   width: 150px;
