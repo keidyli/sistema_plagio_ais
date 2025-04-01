@@ -13,7 +13,6 @@
         <!-- Barra de búsqueda -->
         <form action="/busqueda" method="POST" class="search-form">
             <input type="text" name="titulo" placeholder="Ingrese el título del proyecto" required>
-            <input type="number" name="umbral" step="0.01" min="0.5" max="1.0" value="<%= typeof umbral !== 'undefined' ? umbral : 0.8 %>" placeholder="Umbral de similitud">
             <button type="submit">Buscar</button>
         </form>
 

@@ -12,7 +12,7 @@
 CREATE TABLE IF NOT EXISTS data_one
     (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        cdi_estu VARCHAR(15) NOT NULL,
+        cdi_estu VARCHAR(15) NOT NULL UNIQUE,
         name_estu VARCHAR(100) NOT NULL,
         title_project TEXT NOT NULL,
         periodo VARCHAR (10) NOT NULL,  
