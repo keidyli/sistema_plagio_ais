@@ -8,7 +8,7 @@ const consultas = {
     
     mostrar_proyecto : "SELECT * FROM data_one",
 
-    nuevo_proyecto: "INSERT INTO data_one(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor) VALUES (?, ?, ?, ?, ?, ?);",
+    nuevo_proyecto: "INSERT INTO data_one(cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor) VALUES (?, ?, ?, ?, ?, ?, ?);",
 
     mostrar_proyecto_por_id: "SELECT * FROM data_one WHERE id = ?",
 
@@ -18,6 +18,7 @@ const consultas = {
                             cdi_estu = ?,
                             name_estu = ?,
                             title_project = ?,
+                            lineamiento = ?,
                             periodo = ?,
                             name_tutor = ?,
                             contact_tutor = ?
@@ -31,9 +32,9 @@ const consultas = {
 //Exportando los métodos necesarios para manipular la tabla clientes y productos
 module.exports = {
     
-    nuevoProyecto(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor){
+    nuevoProyecto(cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor){
         return new Promise((resolve, reject)=>{
-            db.query(consultas.nuevo_proyecto, [cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor], (err)=> {
+            db.query(consultas.nuevo_proyecto, [cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor], (err)=> {
                 if(err) reject(err);
                 resolve()
             })
@@ -67,9 +68,9 @@ module.exports = {
         });
     },
 
-    actualizarProyecto(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor){
+    actualizarProyecto(id, cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor){
         return new Promise((resolve, reject) => {
-            db.query(consultas.actualizar_proyecto, [cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor, id], (err) => {
+            db.query(consultas.actualizar_proyecto, [cdi_estu, name_estu, title_project, lineamiento,  periodo, name_tutor, contact_tutor, id], (err) => {
                 if(err) reject(err);
                 resolve();
             });

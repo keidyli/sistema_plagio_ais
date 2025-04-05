@@ -113,9 +113,9 @@ router.get('/add', protectRoute, (req, res) => {
 });
 
 router.post('/add', (req, res) => {
-  const {cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor} = req.body;
+  const {cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor} = req.body;
   main
-    .nuevoProyecto(cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+    .nuevoProyecto(cdi_estu, name_estu, title_project, lineamiento,  periodo, name_tutor, contact_tutor)
     .then(() => {
       res.redirect('/principal?action=add&success=true'); // Redirigir con acción de agregar
     })
@@ -142,10 +142,10 @@ router.get('/editar/:id', protectRoute, (req, res) => {
 
 //Obteniendo datos de la vista editar
 router.post('/editar', (req, res) => {
-  const {id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor} = req.body;
-  console.log(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+  const {id, cdi_estu, name_estu, title_project,lineamiento, periodo, name_tutor, contact_tutor} = req.body;
+  console.log(id, cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor)
   main
-    .actualizarProyecto(id, cdi_estu, name_estu, title_project, periodo, name_tutor, contact_tutor)
+    .actualizarProyecto(id, cdi_estu, name_estu, title_project, lineamiento,  periodo, name_tutor, contact_tutor)
     .then(() => {
       res.redirect('/principal')
     })
@@ -176,8 +176,8 @@ router.post('/search', protectRoute, (req, res) => {
 
   if (buscar.trim() !== '') {
     // Si se manda un término de búsqueda, se agregan las condiciones
-    query += ' AND (cdi_estu LIKE ? OR name_estu LIKE ? OR title_project LIKE ? OR periodo LIKE ? OR name_tutor LIKE ? OR contact_tutor LIKE ?)';
-    queryParams.push(`%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`);
+    query += ' AND (cdi_estu LIKE ? OR name_estu LIKE ? OR title_project LIKE ? OR lineamiento LIKE ? OR periodo LIKE ? OR name_tutor LIKE ? OR contact_tutor LIKE ?)';
+    queryParams.push(`%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`, `%${buscar}%`);
   } else {
     // Si el campo de búsqueda está vacío, se agrega el LIMIT
     query += ' LIMIT ?';

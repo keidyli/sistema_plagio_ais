@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS data_one
         cdi_estu VARCHAR(15) NOT NULL UNIQUE,
         name_estu VARCHAR(100) NOT NULL,
         title_project TEXT NOT NULL,
+        lineamiento VARCHAR (100) NOT NULL,
         periodo VARCHAR (10) NOT NULL,  
         name_tutor VARCHAR (100) NOT NULL,
         contact_tutor VARCHAR (100) NOT NULL  
