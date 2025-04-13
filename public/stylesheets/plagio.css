@@ -40,7 +40,7 @@ h1 {
     outline: none;
 }
 
-.search-form button {
+.search-form button, a{
     padding: 10px 15px;
     font-size: 16px;
     background-color: #3498db;
@@ -48,6 +48,7 @@ h1 {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none;
 }
 
 .search-form button:hover {

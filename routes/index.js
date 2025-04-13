@@ -95,7 +95,6 @@ const protectRoute = (req, res, next) => {
 };
 
 // Mostrando Ruta protegida 
-// ✅ Correcto
 router.get('/principal', protectRoute, (req, res) => {
   main.mostrarProyecto()
     .then(datos => {
