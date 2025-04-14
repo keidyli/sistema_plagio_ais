@@ -1,6 +1,11 @@
+@font-face{
+	font-family:'fuenteNueva';
+	src:url(/fonts/ComicNeue-Regular.ttf);
+}
+
 /* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
+    font: 19px 'fuenteNueva';
     background-color: #f4f8ff;
     margin: 0;
     padding: 0;
@@ -22,7 +27,15 @@ body {
 h1 {
     color: #2c3e50;
     font-size: 24px;
+    padding-bottom: 15px;
 }
+
+/* Resaltar similitudes altas (>= 90%) */
+.similitud-alta {
+    color: #d10000; /* Rojo brillante */
+    font-weight: bold; /* Texto en negrita */
+    background-color: #ffcccc; /* Fondo suave */
+}  
 
 /* Barra de búsqueda */
 .search-form {
@@ -40,9 +53,18 @@ h1 {
     outline: none;
 }
 
+.busqueda-info {
+    font-size: 19px;
+    margin: 10px 0;
+    color: #333;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
 .search-form button, a{
     padding: 10px 15px;
-    font-size: 16px;
+    font-size: 17px;
     background-color: #3498db;
     color: white;
     border: none;

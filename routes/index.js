@@ -216,7 +216,7 @@ router.post('/busqueda', protectRoute, async (req, res) => {
               const tituloProyectoProcesado = preprocessText(proyecto.title_project);
               const similitud = calculateBagOfWordsSimilarity(tituloBusquedaProcesado, tituloProyectoProcesado);
 
-              if (similitud >= 0.6) {
+              if (similitud >= 0.7) {
                   return {
                       titulo: proyecto.title_project,
                       estudiante: proyecto.name_estu,
@@ -230,7 +230,7 @@ router.post('/busqueda', protectRoute, async (req, res) => {
       // Filtrar valores nulos
       const resultadosFiltrados = resultados.filter(res => res);
 
-      res.render('antiPlagio', { resultados: resultadosFiltrados });
+      res.render('antiPlagio', { resultados: resultadosFiltrados, titulo: tituloBusqueda });
   } catch (error) {
       console.error(error);
       res.status(500).send('Error al buscar proyectos');

@@ -14,8 +14,14 @@
         <form action="/busqueda" method="POST" class="search-form">
             <input type="text" name="titulo" placeholder="Ingrese el título del proyecto" required>
             <button type="submit">Buscar</button>
+            <a href="/busqueda">Refrescar</a>
             <a href="/principal">Salir</a>
         </form>
+
+        <!-- Título de búsqueda -->
+       <% if (typeof titulo !== 'undefined' && titulo.trim() !== '') { %>
+        <p class="busqueda-info">Resultados de búsqueda para: <strong><%= titulo %></strong></p>
+       <% } %> 
 
         <!-- Resultados -->
         <% if (typeof resultados !== 'undefined') { %>
@@ -35,13 +41,15 @@
                                 <td><%= resultado.titulo %></td>
                                 <td><%= resultado.estudiante %></td>
                                 <td><%= resultado.cedula %></td>
-                                <td><%= resultado.similitud %>%</td>
+                                <td class="<%= resultado.similitud >= 90 ? 'similitud-alta' : '' %>">
+                                    <%= resultado.similitud %>%
+                                </td>
                             </tr>
                         <% }) %>
                     </tbody>
                 </table>
             <% } else { %>
-                <p class="no-results">No se encontraron proyectos con un nivel de similitud superior al 80%.</p>
+                <p class="no-results">No se encontraron proyectos con un nivel de similitud superior al 70%.</p>
             <% } %>
         <% } %>
     </div>
