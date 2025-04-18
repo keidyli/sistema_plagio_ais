@@ -1,53 +1,10 @@
-const express = require('express');
+const express = require ('express');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const router = express.Router();
 const main = require('../models/principal');
 const db = require("../data/db");
-const natural = require('natural');
-const stopword = require('stopword');
-
-// Usar PorterStemmer en lugar de PorterStemmerEs para evitar problemas
-const stemmer = natural.PorterStemmer;
-
-/**
-* Preprocesa el texto:
-* - Convierte a minúsculas
-* - Elimina signos de puntuación
-* - Separa palabras
-* - Elimina palabras vacías (stopwords)
-* - Aplica stemming
-*/
-function preprocessText(text) {
-  text = text.toLowerCase();
-  text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Elimina tildes
-  text = text.replace(/[^\w\s]/g, ''); // Elimina signos de puntuación
-  let words = text.split(/\s+/);
-  words = stopword.removeStopwords(words, stopword.spa);
-  return words.join(' '); // No aplicamos stemming
-}
-
-/**
-* Calcula la similitud del coseno entre dos textos preprocesados.
-*/
-function calculateBagOfWordsSimilarity(text1, text2) {
-  const words1 = text1.split(' ');
-  const words2 = text2.split(' ');
-
-  // Crear un conjunto único de palabras
-  const allWords = new Set([...words1, ...words2]);
-
-  // Crear vectores binarios (1 si la palabra está, 0 si no)
-  const vector1 = Array.from(allWords).map(word => words1.includes(word) ? 1 : 0);
-  const vector2 = Array.from(allWords).map(word => words2.includes(word) ? 1 : 0);
-
-  // Calcular producto punto y magnitudes
-  const dotProduct = vector1.reduce((sum, val, i) => sum + val * vector2[i], 0);
-  const magnitude1 = Math.sqrt(vector1.reduce((sum, val) => sum + val * val, 0));
-  const magnitude2 = Math.sqrt(vector2.reduce((sum, val) => sum + val * val, 0));
-
-  return magnitude1 && magnitude2 ? dotProduct / (magnitude1 * magnitude2) : 0;
-}
+const axios = require('axios');
 
 
 // Ruta para mostrar la vista de login
@@ -205,50 +162,49 @@ router.post('/busqueda', protectRoute, async (req, res) => {
   const tituloBusqueda = req.body.titulo;
 
   try {
-      const tituloBusquedaProcesado = preprocessText(tituloBusqueda);
+    // Obtener todos los proyectos
+    const proyectos = await main.obtenerTitulos();
 
-      // Obtener solo los títulos y datos necesarios
-      const proyectos = await main.obtenerTitulos();
+    // Comparar cada título contra el ingresado, usando la API
+    const resultados = await Promise.all(
+      proyectos.map(async (proyecto) => {
+        try {
+          const respuesta = await axios.post('http://127.0.0.1:8000/comparar', {
+           titulo_db: proyecto.title_project,
+           titulo_input: tituloBusqueda
+          });
 
-      // Procesar todos los títulos en paralelo
-      const resultados = await Promise.all(
-          proyectos.map(async (proyecto) => {
-              const tituloProyectoProcesado = preprocessText(proyecto.title_project);
-              const similitud = calculateBagOfWordsSimilarity(tituloBusquedaProcesado, tituloProyectoProcesado);
+          const similitud = respuesta.data.similitud;
 
-              if (similitud >= 0.7) {
-                  return {
-                      titulo: proyecto.title_project,
-                      estudiante: proyecto.name_estu,
-                      cedula: proyecto.cdi_estu,
-                      similitud: (similitud * 100).toFixed(2)
-                  };
-              }
-          })
-      );
+          // Solo incluir si supera el 40%
+          if (similitud >= 40) {
+            return {
+              titulo: proyecto.title_project,
+              estudiante: proyecto.name_estu,
+              cedula: proyecto.cdi_estu,
+              similitud: similitud.toFixed(2),
+              clasificacion: respuesta.data.clasificacion
+            };
+          }
+        } catch (error) {
+          console.error(`Error al consultar la API para el título: ${proyecto.title_project}`, error.message);
+          return null;
+        }
+      })
+    );
 
-      // Filtrar valores nulos
-      const resultadosFiltrados = resultados.filter(res => res);
+    const resultadosFiltrados = resultados.filter(res => res);
 
-      res.render('antiPlagio', { resultados: resultadosFiltrados, titulo: tituloBusqueda });
+    res.render('antiPlagio', {
+      resultados: resultadosFiltrados,
+      titulo: tituloBusqueda
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Error al buscar proyectos');
+    console.error('Error al buscar o conectar con la API:', error);
+    res.status(500).send('Error al buscar proyectos');
   }
 });
 
-
-// Pruebas manuales de preprocesamiento
-const prueba1 = "Sistema de gestión académica";
-const prueba2 = "Sistema de gestión académica";
-
-console.log("Texto original 1:", prueba1);
-console.log("Texto preprocesado 1:", preprocessText(prueba1));
-
-console.log("Texto original 2:", prueba2);
-console.log("Texto preprocesado 2:", preprocessText(prueba2));
-
-console.log("Similitud entre títulos:", calculateBagOfWordsSimilarity(preprocessText(prueba1), preprocessText(prueba2)));
 
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
