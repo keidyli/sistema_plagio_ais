@@ -176,8 +176,8 @@ router.post('/busqueda', protectRoute, async (req, res) => {
 
           const similitud = respuesta.data.similitud;
 
-          // Solo incluir si supera el 40%
-          if (similitud >= 40) {
+          // Solo incluir si supera el 70%
+          if (similitud >= 70) {
             return {
               titulo: proyecto.title_project,
               estudiante: proyecto.name_estu,

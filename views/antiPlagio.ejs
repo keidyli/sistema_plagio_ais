@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparación de Títulos</title>
     <link rel="stylesheet" href="/stylesheets/plagio.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container">
@@ -33,25 +35,51 @@
                             <th>Nombre del estudiante</th>
                             <th>Cédula</th>
                             <th>Similitud</th>
+                            <th>Interpretación</th> 
                         </tr>
                     </thead>
                     <tbody>
-                        <% resultados.forEach(resultado => { %>
+                        <% resultados.forEach((resultado, index) => { 
+                            let clasificacion = "";
+                            if (resultado.similitud >= 90) {
+                              clasificacion = "✨ Casi idéntico";
+                            } else if (resultado.similitud >= 80) {
+                              clasificacion = "✅ Muy similar";
+                            } else if (resultado.similitud >= 70) {
+                              clasificacion = "⚠️ Similar parcial / coincidencia temática";
+                            } else {
+                              clasificacion = "❌ No similar";
+                            }
+                          %>
                             <tr>
-                                <td><%= resultado.titulo %></td>
-                                <td><%= resultado.estudiante %></td>
-                                <td><%= resultado.cedula %></td>
-                                <td class="<%= resultado.similitud >= 90 ? 'similitud-alta' : '' %>">
-                                    <%= resultado.similitud %>%
-                                </td>
+                              <td><%= resultado.titulo %></td>
+                              <td><%= resultado.estudiante %></td>
+                              <td><%= resultado.cedula %></td>
+                              <td class="<%= resultado.similitud >= 90 ? 'similitud-alta' : '' %>">
+                                <%= resultado.similitud %>%
+                              </td>
+                              <td style="text-align:center;">
+                                <button onclick="mostrarInterpretacion('<%= clasificacion %>')">➕</button>
+                              </td>
                             </tr>
-                        <% }) %>
+                          <% }) %>
                     </tbody>
                 </table>
             <% } else { %>
-                <p class="no-results">No se encontraron proyectos con un nivel de similitud superior al 70%.</p>
             <% } %>
         <% } %>
     </div>
+
+    <script>
+        function mostrarInterpretacion(texto) {
+          Swal.fire({
+            title: 'Interpretación del resultado',
+            text: texto,
+            icon: 'info',
+            confirmButtonText: 'Cerrar'
+          });
+        }
+      </script>
+      
 </body>
 </html>
