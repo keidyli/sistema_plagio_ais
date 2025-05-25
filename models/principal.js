@@ -29,7 +29,7 @@ const consultas = {
 
 };
 
-//Exportando los métodos necesarios para manipular la tabla clientes y productos
+//Exportando los métodos necesarios para manipular la tabla data_one 
 module.exports = {
     
     nuevoProyecto(cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor){

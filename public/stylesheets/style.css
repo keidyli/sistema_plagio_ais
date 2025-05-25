@@ -15,6 +15,12 @@ input {
   font: 17px 'fuenteNueva';
 }
 
+.logito{
+  width: 100px;
+  height: auto;
+  margin-bottom: 40px;
+}
+
 .container {
   position: relative;
   width: 100%;

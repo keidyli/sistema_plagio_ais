@@ -7,6 +7,7 @@
     "dev": "nodemon --exec node app.js"
   },
   "dependencies": {
+    "@xenova/transformers": "^2.17.2",
     "axios": "^1.8.4",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -16,10 +17,7 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
-    "natural": "^8.0.1",
     "promise-mysql": "^5.2.0",
-    "stemmer": "^2.0.1",
-    "stopword": "^3.1.4",
     "sweetalert2": "^11.17.2"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@
     <title>Data Principal</title>
     <link rel="stylesheet" href="stylesheets/principal.css">
     <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css">
-
+    <script src="/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 <body>
     <header class="header-page">
@@ -142,7 +142,6 @@
             </div>
     </main>
 
-<script src="/sweetalert2/sweetalert2.min.js"></script>
 <script>
   // Verificar si hay parámetros en la URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -154,50 +153,56 @@
 
   // Mostrar alertas según la acción y el resultado
   if (success === 'true') {
-    let title, text;
+  let title, text;
 
-    if (action === 'delete') {
-      title = '¡Éxito!';
-      text = 'El proyecto ha sido eliminado correctamente.';
-    } else if (action === 'add') {
-      title = '¡Éxito!';
-      text = 'El proyecto ha sido agregado correctamente.';
-    }
-
-    Swal.fire({
-      title: title,
-      text: text,
-      icon: 'success',
-      confirmButtonText: 'Aceptar'
-    }).then(() => {
-      // Limpiar la URL después de mostrar la alerta
-      const currentUrl = window.location.href.split('?')[0];
-      window.history.replaceState(null, null, currentUrl);
-    });
+  if (action === 'delete') {
+    title = '¡Éxito!';
+    text = 'El proyecto ha sido eliminado correctamente.';
+  } else if (action === 'add') {
+    title = '¡Éxito!';
+    text = 'El proyecto ha sido agregado correctamente.';
+  } else if (action === 'editar') {
+    title = '¡Éxito!';
+    text = 'El proyecto ha sido editado correctamente.';
   }
 
-  if (error) {
-    let title, text;
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: 'success',
+    confirmButtonText: 'Aceptar'
+  }).then(() => {
+    const currentUrl = window.location.href.split('?')[0];
+    window.history.replaceState(null, null, currentUrl);
+  });
+}
 
-    if (action === 'delete') {
-      title = 'Error';
-      text = 'Hubo un problema al eliminar el proyecto.';
-    } else if (action === 'add') {
-      title = 'Error';
-      text = 'Hubo un problema al agregar el proyecto.';
-    }
 
-    Swal.fire({
-      title: title,
-      text: text,
-      icon: 'error',
-      confirmButtonText: 'Aceptar'
-    }).then(() => {
-      // Limpiar la URL después de mostrar la alerta
-      const currentUrl = window.location.href.split('?')[0];
-      window.history.replaceState(null, null, currentUrl);
-    });
+if (error) {
+  let title, text;
+
+  if (action === 'delete') {
+    title = 'Error';
+    text = 'Hubo un problema al eliminar el proyecto.';
+  } else if (action === 'add') {
+    title = 'Error';
+    text = 'Hubo un problema al agregar el proyecto.';
+  } else if (action === 'editar') {
+    title = 'Error';
+    text = 'Hubo un problema al editar el proyecto.';
   }
+
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: 'error',
+    confirmButtonText: 'Aceptar'
+  }).then(() => {
+    const currentUrl = window.location.href.split('?')[0];
+    window.history.replaceState(null, null, currentUrl);
+  });
+}
+
 
   // Lógica para manejar la eliminación de proyectos
   document.querySelectorAll('.button_delete').forEach(button => {

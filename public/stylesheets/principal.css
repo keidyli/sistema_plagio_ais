@@ -64,14 +64,15 @@ main {
 }
 
 .panel {
-    width: 300px;
+    width: 400px;
     height: max-content;
     background: var(--azulito);
-    margin: 4.8rem 0 0 .5rem;
+    margin-top: 60px;
+    margin-left: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    padding: .4rem;
+    padding: 25px;
     gap: 15px;
 }
 
@@ -190,10 +191,7 @@ main {
 }
 
 .buttons {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 3px;
     font: 10px 'fuenteNueva';
 }
 
@@ -335,7 +333,7 @@ main {
 
 
 .content-father {
-    width: 100%;
+    width: 200%;
 }
 
 .content-father-form {

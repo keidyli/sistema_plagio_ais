@@ -4,7 +4,7 @@ require('dotenv').config();
 const router = express.Router();
 const main = require('../models/principal');
 const db = require("../data/db");
-const axios = require('axios');
+const { cosineSimilarity, tensorToMatrix, averageEmbeddings, normalizarTexto, loadModelOnce } = require('../utils/similitud');
 
 
 // Ruta para mostrar la vista de login
@@ -59,7 +59,7 @@ router.get('/principal', protectRoute, (req, res) => {
       console.log("mostrando vista principal");
     })
     .catch(err => {
-      console.error("Error al obtener proyectos:", err); // 👁️ ¡Agrega logs para debuggear!
+      console.error("Error al obtener proyectos:", err);
       res.render('principal', { datos: {} });
     });
 });
@@ -103,10 +103,10 @@ router.post('/editar', (req, res) => {
   main
     .actualizarProyecto(id, cdi_estu, name_estu, title_project, lineamiento,  periodo, name_tutor, contact_tutor)
     .then(() => {
-      res.redirect('/principal')
+      res.redirect('/principal?action=editar&success=true')
     })
     .catch(err => {
-      res.send(err);
+      res.redirect('/principal?action=editar&error=1')
     });
 });
 
@@ -119,6 +119,7 @@ router.get('/delete/:id', (req, res) => {
       res.redirect('/principal?action=delete&success=true'); // Redirigir con acción de eliminar
     })
     .catch(err => {
+      console.error("Error en nuevoProyecto:", err); // Mejorar el logging del error
       res.redirect('/principal?action=delete&error=1'); // Redirigir con acción de eliminar y error
     });
 }); 
@@ -158,38 +159,46 @@ router.get('/busqueda', protectRoute, (req, res) => {
 });
 
 // Manejando lógica de comparación de títulos
+function clasificarSimilitud(score) {
+  if (score >= 90) return "✨ Casi idéntico";
+  if (score >= 80) return "✅ Muy similar";
+  if (score >= 70) return "⚠️ Similar parcial / coincidencia temática";
+  return "❌ No similar";
+}
+
 router.post('/busqueda', protectRoute, async (req, res) => {
   const tituloBusqueda = req.body.titulo;
 
   try {
-    // Obtener todos los proyectos
     const proyectos = await main.obtenerTitulos();
 
-    // Comparar cada título contra el ingresado, usando la API
+    const extractor = await loadModelOnce(); // carga única del modelo
+
+    const textoInput = normalizarTexto(tituloBusqueda);
+    const embInput = await extractor(textoInput);
+    const matrixInput = tensorToMatrix(embInput);
+    const avgInput = averageEmbeddings(matrixInput);
+
     const resultados = await Promise.all(
       proyectos.map(async (proyecto) => {
-        try {
-          const respuesta = await axios.post('http://127.0.0.1:8000/comparar', {
-           titulo_db: proyecto.title_project,
-           titulo_input: tituloBusqueda
-          });
+        const textoDB = normalizarTexto(proyecto.title_project);
+        const embDB = await extractor(textoDB);
+        const matrixDB = tensorToMatrix(embDB);
+        const avgDB = averageEmbeddings(matrixDB);
 
-          const similitud = respuesta.data.similitud;
+        const similitud = cosineSimilarity(avgInput, avgDB) * 100;
 
-          // Solo incluir si supera el 70%
-          if (similitud >= 70) {
-            return {
-              titulo: proyecto.title_project,
-              estudiante: proyecto.name_estu,
-              cedula: proyecto.cdi_estu,
-              similitud: similitud.toFixed(2),
-              clasificacion: respuesta.data.clasificacion
-            };
-          }
-        } catch (error) {
-          console.error(`Error al consultar la API para el título: ${proyecto.title_project}`, error.message);
-          return null;
+        if (similitud >= 70) {
+          return {
+            titulo: proyecto.title_project,
+            estudiante: proyecto.name_estu,
+            cedula: proyecto.cdi_estu,
+            similitud: similitud.toFixed(2),
+            clasificacion: clasificarSimilitud(similitud)
+          };
         }
+
+        return null;
       })
     );
 
@@ -199,9 +208,10 @@ router.post('/busqueda', protectRoute, async (req, res) => {
       resultados: resultadosFiltrados,
       titulo: tituloBusqueda
     });
+
   } catch (error) {
-    console.error('Error al buscar o conectar con la API:', error);
-    res.status(500).send('Error al buscar proyectos');
+    console.error('Error al procesar similitudes:', error);
+    res.status(500).send('Error interno del servidor');
   }
 });
 
