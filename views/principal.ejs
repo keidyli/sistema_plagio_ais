@@ -26,14 +26,14 @@
             </div>
             
             <div class="information">
-                    <a href="/usuarios">
-                        <li class="fa fa-user"></li>Estadisticas
+                    <a href="/reportes-Plagio">
+                        <li class="fa fa-user"></li>Reporte por niveles
                     </a>
                 
             </div>
             <div class="information">
                 <a href="/busqueda">
-                    <li class="fa fa-car"></li>Verificador
+                    <li class="fa fa-car"></li>Comparación de Títulos
                 </a>
             </div>
             
@@ -178,32 +178,35 @@
 }
 
 
-if (error) {
-  let title, text;
+// Mostrar alertas de error según la acción
+  if (error) {
+    let title = 'Error';
+    let text = 'Ocurrió un problema.';
 
-  if (action === 'delete') {
-    title = 'Error';
-    text = 'Hubo un problema al eliminar el proyecto.';
-  } else if (action === 'add') {
-    title = 'Error';
-    text = 'Hubo un problema al agregar el proyecto.';
-  } else if (action === 'editar') {
-    title = 'Error';
-    text = 'Hubo un problema al editar el proyecto.';
+    if (action === 'delete') {
+      text = 'Hubo un problema al eliminar el proyecto.';
+    } else if (action === 'add') {
+      if (error === 'duplicate') {
+        text = 'Ya existe un proyecto con esa cédula.';
+      } else {
+        text = 'Hubo un problema al agregar el proyecto.';
+      }
+    } else if (action === 'editar') {
+      text = 'Hubo un problema al editar el proyecto.';
+    }
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    }).then(() => {
+      const currentUrl = window.location.href.split('?')[0];
+      window.history.replaceState(null, null, currentUrl);
+    });
   }
 
-  Swal.fire({
-    title: title,
-    text: text,
-    icon: 'error',
-    confirmButtonText: 'Aceptar'
-  }).then(() => {
-    const currentUrl = window.location.href.split('?')[0];
-    window.history.replaceState(null, null, currentUrl);
-  });
-}
-
-
+  
   // Lógica para manejar la eliminación de proyectos
   document.querySelectorAll('.button_delete').forEach(button => {
     button.addEventListener('click', function (e) {
@@ -235,3 +238,10 @@ if (error) {
 
 </body>
 </html>
+
+
+
+
+
+
+

@@ -10,7 +10,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 app.set("port", 5000);//Asignando Puerto
 app.listen(app.get('port'));//Escuchando las comunicaciones
-console.log("escuchando comunicaciones del puerto", app.set("port"));
+console.log("escuchando comunicaciones del puerto", app.get("port"));
 
 
 //Configuracion del Servidor

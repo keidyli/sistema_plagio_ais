@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte Antiplagio</title>
+  <script src="/javascripts/chart.js"></script>
+  <link rel="stylesheet" href="stylesheets/reportes_opcion.css">
+</head>
+<body>
+  <div class="encabezado">
+   <h1 class="main">Reporte de Plagio por Nivel de Riesgo</h1>
+   <a href="/principal" class="boton_one">Volver</a>
+  </div>
+
+  <form action="/reportes-Plagio" method="POST">
+    <label for="mes">Mes:</label>
+    <select name="mes" id="mes" required>
+      <option value="">Seleccionar mes</option>
+      <% for (let i = 1; i <= 12; i++) { %>
+        <option value="<%= i %>" <%= parseInt(mes || 0) === i ? 'selected' : '' %>>
+          <%= new Date(0, i - 1).toLocaleString('es-ES', { month: 'long' }) %>
+        </option>
+      <% } %>
+    </select>
+
+    <label for="anio">Año:</label>
+    <select name="anio" id="anio" required>
+      <option value="">Seleccionar año</option>
+      <% for (let y = 2025; y <= 2035; y++) { %>
+        <option value="<%= y %>" <%= parseInt(anio) === y ? 'selected' : '' %>><%= y %></option>
+      <% } %>
+    </select>
+
+    <label for="nivel">Nivel de Riesgo:</label>
+    <select name="nivel" id="nivel" required>
+      <option value="Todos" <%= nivel === 'Todos' ? 'selected' : '' %>>Todos</option>
+      <option value="Bajo" <%= nivel === 'Bajo' ? 'selected' : '' %>>Bajo</option>
+      <option value="Medio" <%= nivel === 'Medio' ? 'selected' : '' %>>Medio</option>
+      <option value="Alto" <%= nivel === 'Alto' ? 'selected' : '' %>>Alto</option>
+    </select>
+
+    <button class="two" type="submit">Generar Reporte</button>
+  </form>
+
+  <!-- Gráfico -->
+   
+  <% if (datosGrafico) { %>
+    <h2 class="primerT">Resultados para <%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long', year: 'numeric' }) %></h2>
+    <h2 id="tituloGraficoTexto"></h2>
+    <div class="container-grafico">
+    <canvas id="graficoRiesgos"></canvas>
+    </div>
+    <script>
+      const nivelSeleccionado = "<%= nivel %>";
+      const datos = <%- JSON.stringify(datosGrafico) %>;
+
+      const labels = [];
+      const values = [];
+      const colors = [];
+
+      let tituloGrafico = "";
+
+      if (nivelSeleccionado === "Todos" || nivelSeleccionado === "Bajo") {
+        labels.push("Bajo");
+        values.push(datos.bajo);
+        colors.push("#28a745");
+      }
+      if (nivelSeleccionado === "Todos" || nivelSeleccionado === "Medio") {
+        labels.push("Medio");
+        values.push(datos.medio);
+        colors.push("#ffc107");
+      }
+      if (nivelSeleccionado === "Todos" || nivelSeleccionado === "Alto") {
+        labels.push("Alto");
+        values.push(datos.alto);
+        colors.push("#dc3545");
+      }
+
+      if (nivelSeleccionado === "Todos") {
+    tituloGrafico = `Totales: Bajo: ${datos.bajo}, Medio: ${datos.medio}, Alto: ${datos.alto}`;
+  } else if (nivelSeleccionado === "Bajo") {
+    tituloGrafico = `El Total de Proyectos con Riesgo Bajo es: ${datos.bajo}`;
+  } else if (nivelSeleccionado === "Medio") {
+    tituloGrafico = `El Total de Proyectos con Riesgo Medio es: ${datos.medio}`;
+  } else if (nivelSeleccionado === "Alto") {
+    tituloGrafico = `El Total de Proyectos con Riesgo Alto es: ${datos.alto}`;
+  }
+
+     // Mostrar título en el <h2>
+      document.getElementById("tituloGraficoTexto").textContent = tituloGrafico;
+
+      const ctx = document.getElementById('graficoRiesgos').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Proyectos por Nivel de Riesgo',
+            data: values,
+            backgroundColor: colors,
+            barThickness: 100 
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    </script>
+  <% } %>
+
+ <script>
+  console.log("Chart.js cargado:", typeof Chart);
+</script>
+
+</body>
+</html>

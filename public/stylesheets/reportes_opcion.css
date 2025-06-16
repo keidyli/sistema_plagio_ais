@@ -1,0 +1,109 @@
+@font-face{
+	font-family:'fuenteNueva';
+	src:url(/fonts/ComicNeue-Regular.ttf);
+}
+
+body {
+ font: 20px 'fuenteNueva';
+ padding: 30px;
+ margin: 0;
+ height: 100vh;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ background-color: #dadfd4;
+}
+
+form {
+ margin-bottom: 10px;
+}
+
+canvas {
+ max-width: 600px;
+}
+
+.primerT {
+ margin-bottom: 10px;
+ font-size: 25px;
+}
+
+.main{
+ font-size: 30px;
+}
+
+#tituloGraficoTexto {
+ text-align: center;
+ margin-top: 5px;
+ font-size: 25px ;
+}
+
+.container-grafico{
+ width: 600px;
+ height: 800px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin-bottom: 23px;   
+}
+
+label {
+  margin-bottom: 4px;
+  color: #333;
+}
+
+select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s;
+  font: 15px 'fuenteNueva';
+}
+
+.two{
+ margin-left: 13px;
+ padding: 6px 10px;
+ border: 1px solid #ccc;
+ border-radius: 6px;
+ background-color: #fff;
+ color: #333;
+ outline: none;
+ transition: border-color 0.3s;
+ font: 15px 'fuenteNueva';
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; /* Espacio interno entre los lados */
+}
+
+.boton_one {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font: 15px 'fuenteNueva';
+  text-decoration: none;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin-left: 40px;
+}
+
+.boton_one:hover {
+  background-color: #f0f0f0;
+  border-color: #007BFF;
+}
+
+select:focus {
+  border-color: #007BFF;
+}
+
+/* Aplica estilo visual a las options solo en navegadores que lo permiten */
+option {
+  background-color: #fff;
+  color: #333;
+}

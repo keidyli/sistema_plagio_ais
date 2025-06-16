@@ -18,6 +18,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
     "promise-mysql": "^5.2.0",
+    "puppeteer": "^24.9.0",
     "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
