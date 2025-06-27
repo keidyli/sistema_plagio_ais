@@ -45,11 +45,13 @@
   <!-- Gráfico -->
    
   <% if (datosGrafico) { %>
-    <h2 class="primerT">Resultados para <%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long', year: 'numeric' }) %></h2>
-    <h2 id="tituloGraficoTexto"></h2>
-    <div class="container-grafico">
-    <canvas id="graficoRiesgos"></canvas>
-    </div>
+    <div id="reportePDF" class="bloque-reporte">
+      <h2 class="primerT">Resultados para <%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long', year: 'numeric' }) %></h2>
+      <h2 id="tituloGraficoTexto"></h2>
+      <div class="container-grafico">
+        <canvas id="graficoRiesgos"></canvas>
+      </div>
+    </div>    
     <script>
       const nivelSeleccionado = "<%= nivel %>";
       const datos = <%- JSON.stringify(datosGrafico) %>;
@@ -109,11 +111,52 @@
         }
       });
     </script>
+    <button id="btnDescargarPDF">Descargar PDF</button>
   <% } %>
 
  <script>
   console.log("Chart.js cargado:", typeof Chart);
 </script>
+
+<script>
+  document.getElementById('btnDescargarPDF').addEventListener('click', async () => {
+    const { jsPDF } = window.jspdf;
+    const elemento = document.getElementById('reportePDF');
+
+    const canvas = await html2canvas(elemento, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    pdf.setFontSize(18);
+    pdf.text('Reporte de Plagio por Nivel de Riesgo', 20, 20);
+
+    const mesNombre = "<%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long' }) %>";
+    const anioTexto = "<%= anio %>";
+    const nivelTexto = "<%= nivel %>";
+    pdf.setFontSize(12);
+    pdf.text(`Mes: ${mesNombre}`, 20, 30);
+    pdf.text(`Año: ${anioTexto}`, 20, 36);
+    pdf.text(`Nivel de Riesgo: ${nivelTexto}`, 20, 42);
+
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = 170;
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 20, 50, pdfWidth, pdfHeight);
+
+    pdf.save('reporte_plagio.pdf');
+  });
+</script>
+
+
+<script src="/javascripts/html2canvas.min.js"></script>
+<script src="/javascripts/jspdf.umd.min.js"></script>
+
+
 
 </body>
 </html>

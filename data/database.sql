@@ -20,14 +20,15 @@ CREATE TABLE IF NOT EXISTS data_one
         name_tutor VARCHAR (100) NOT NULL,
         contact_tutor VARCHAR (100) NOT NULL  
     );
-
-  CREATE TABLE resultados_antiplagio
-  (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  id_data INT NOT NULL,
-  similitud FLOAT,
-  clasificacion VARCHAR(50),
-  nivel_riesgo ENUM('Alto', 'Medio', 'Bajo') NOT NULL,
-  fecha_analisis DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_data) REFERENCES data_one(id)
+    
+CREATE TABLE IF NOT EXISTS resultados_antiplagio (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_data INT NOT NULL,
+    similitud FLOAT,
+    clasificacion VARCHAR(50),
+    nivel_riesgo ENUM('Alto', 'Medio', 'Bajo') NOT NULL,
+    fecha_analisis DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT resultados_antiplagio_ibfk_1
+        FOREIGN KEY (id_data) REFERENCES data_one(id)
+        ON DELETE CASCADE
 );
