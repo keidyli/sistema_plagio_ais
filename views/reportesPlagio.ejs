@@ -6,6 +6,7 @@
   <script src="/javascripts/chart.js"></script>
   <link rel="stylesheet" href="stylesheets/reportes_opcion.css">
 </head>
+
 <body>
   <div class="encabezado">
    <h1 class="main">Reporte de Plagio por Nivel de Riesgo</h1>
@@ -49,7 +50,7 @@
       <h2 class="primerT">Resultados para <%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long', year: 'numeric' }) %></h2>
       <h2 id="tituloGraficoTexto"></h2>
       <div class="container-grafico">
-        <canvas id="graficoRiesgos"></canvas>
+        <canvas id="graficoRiesgos" width="600" height="400"></canvas>
       </div>
     </div>    
     <script>
@@ -79,18 +80,17 @@
       }
 
       if (nivelSeleccionado === "Todos") {
-    tituloGrafico = `Totales: Bajo: ${datos.bajo}, Medio: ${datos.medio}, Alto: ${datos.alto}`;
-  } else if (nivelSeleccionado === "Bajo") {
-    tituloGrafico = `El Total de Proyectos con Riesgo Bajo es: ${datos.bajo}`;
-  } else if (nivelSeleccionado === "Medio") {
-    tituloGrafico = `El Total de Proyectos con Riesgo Medio es: ${datos.medio}`;
-  } else if (nivelSeleccionado === "Alto") {
-    tituloGrafico = `El Total de Proyectos con Riesgo Alto es: ${datos.alto}`;
-  }
+        tituloGrafico = `Totales: Bajo: ${datos.bajo}, Medio: ${datos.medio}, Alto: ${datos.alto}`;
+      } else if (nivelSeleccionado === "Bajo") {
+        tituloGrafico = `El Total de Proyectos con Riesgo Bajo es: ${datos.bajo}`;
+      } else if (nivelSeleccionado === "Medio") {
+        tituloGrafico = `El Total de Proyectos con Riesgo Medio es: ${datos.medio}`;
+      } else if (nivelSeleccionado === "Alto") {
+        tituloGrafico = `El Total de Proyectos con Riesgo Alto es: ${datos.alto}`;
+      }
 
-     // Mostrar título en el <h2>
       document.getElementById("tituloGraficoTexto").textContent = tituloGrafico;
-
+      
       const ctx = document.getElementById('graficoRiesgos').getContext('2d');
       new Chart(ctx, {
         type: 'bar',
@@ -105,8 +105,29 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
+          devicePixelRatio: 2, // Mejora la nitidez
           plugins: {
-            legend: { display: false }
+            legend: { 
+              display: false 
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                font: {
+                  size: 12
+                }
+              }
+            },
+            x: {
+              ticks: {
+                font: {
+                  size: 12
+                }
+              }
+            }
           }
         }
       });
@@ -114,7 +135,7 @@
     <button id="btnDescargarPDF">Descargar PDF</button>
   <% } %>
 
- <script>
+<script>
   console.log("Chart.js cargado:", typeof Chart);
 </script>
 
@@ -123,40 +144,68 @@
     const { jsPDF } = window.jspdf;
     const elemento = document.getElementById('reportePDF');
 
-    const canvas = await html2canvas(elemento, { scale: 2 });
-    const imgData = canvas.toDataURL('image/png');
+    //  Cargar la imagen manualmente
+   const imgLogo = new Image();
+   imgLogo.src = '/images/ais.jpg'; // Ruta desde el servidor Express
 
+  imgLogo.onload = async function () {
+    
+    // Configuración mejorada para html2canvas
+    const canvas = await html2canvas(elemento, { 
+      scale: 3, // Aumentar escala para mejor nitidez
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      width: elemento.offsetWidth,
+      height: elemento.offsetHeight,
+      scrollX: 0,
+      scrollY: 0
+    });
+    
+    const imgData = canvas.toDataURL('image/png', 1.0); // Calidad máxima
+    
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
+    
+     // Insertar el logo (por ejemplo, 20mm x 10mm, en esquina superior derecha)
+    pdf.addImage(imgLogo, 'JPEG', 150, 10, 30, 20); // X, Y, width, height
 
-    pdf.setFontSize(18);
-    pdf.text('Reporte de Plagio por Nivel de Riesgo', 20, 20);
+    // Título principal más pequeño
+    pdf.setFontSize(14);
+    pdf.text('Reporte de Plagio por Nivel de Riesgo Similitud', 20, 20);
 
     const mesNombre = "<%= new Date(anio, mes - 1).toLocaleString('es-ES', { month: 'long' }) %>";
     const anioTexto = "<%= anio %>";
     const nivelTexto = "<%= nivel %>";
-    pdf.setFontSize(12);
+    
+    // Información más pequeña
+    pdf.setFontSize(10);
     pdf.text(`Mes: ${mesNombre}`, 20, 30);
     pdf.text(`Año: ${anioTexto}`, 20, 36);
     pdf.text(`Nivel de Riesgo: ${nivelTexto}`, 20, 42);
-
+    
+    // Calcular dimensiones para mantener proporción
     const imgProps = pdf.getImageProperties(imgData);
     const pdfWidth = 170;
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 20, 50, pdfWidth, pdfHeight);
+    
+    // Agregar imagen con mejor calidad
+    pdf.addImage(imgData, 'PNG', 20, 50, pdfWidth, pdfHeight, '', 'FAST');
+    
+    pdf.save('reporte_resultadosConNiveles.pdf');
+  };
 
-    pdf.save('reporte_plagio.pdf');
-  });
+  imgLogo.onerror = () => {
+   alert("No se pudo cargar la imagen del logo. Verifica la ruta: '/images/ais.jpg'");
+  };
+});
 </script>
-
 
 <script src="/javascripts/html2canvas.min.js"></script>
 <script src="/javascripts/jspdf.umd.min.js"></script>
-
-
 
 </body>
 </html>
