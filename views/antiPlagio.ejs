@@ -21,19 +21,31 @@
         </form>
 
         <!-- Título de búsqueda -->
-       <% if (typeof titulo !== 'undefined' && titulo.trim() !== '') { %>
-        <p class="busqueda-info">Resultados de búsqueda para: <strong><%= titulo %></strong></p>
-       <% } %> 
 
-       <% if (typeof titulo !== 'undefined' && titulo.trim() !== '') { %>
-        <form action="/reporte-pdf" method="get" target="_blank" style="margin-top: 10px;">
-            <input type="hidden" name="titulo" value="<%= titulo %>">
-            <button type="submit" style="background-color: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-                📄 Descargar PDF
-            </button>
-        </form>
-      <% } %>
-      
+        <% const tituloSeguro = typeof titulo !== 'undefined' ? titulo : ''; %>
+
+        <% if (tituloSeguro.trim() !== '') { %>
+          <% if (resultados && resultados.length > 0) { %>
+            <p class="busqueda-info">
+              Resultados de búsqueda para: <strong><%= tituloSeguro %></strong>
+            </p>
+          <% } else { %> 
+            <p class="busqueda-info">
+              No se encontraron resultados para: <strong><%= tituloSeguro %></strong>
+            </p>
+          <% } %>
+        <% } %>
+        
+
+        <% if (tituloSeguro && titulo.trim() !== '' && resultados && resultados.length > 0) { %>
+          <form action="/reporte-pdf" method="get" target="_blank" style="margin-top: 10px;">
+              <input type="hidden" name="titulo" value="<%= titulo %>">
+              <button type="submit" style="background-color: #dc3545; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
+                  📄 Descargar PDF
+              </button>
+          </form>
+        <% } %>
+        
         <!-- Resultados -->
         <% if (typeof resultados !== 'undefined') { %>
             <% if (resultados.length > 0) { %>

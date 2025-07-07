@@ -7,7 +7,6 @@
 
 
 
-
 //para agg nuevos: 
 
 Creación de un Chatbot Inteligente de Atención al Cliente Utilizando Procesamiento de Lenguaje Natural (PLN) en la Universidad Carabobo, Valencia.
@@ -15,3 +14,7 @@ Creación de un Chatbot Inteligente de Atención al Cliente Utilizando Procesami
 Diseño de una Plataforma Móvil para la Evaluación Académica con Autenticación Biométrica
 
 Desarrollo de un Sistema de Gestión de Tareas Colaborativas con Funcionalidades Basadas en Inteligencia Artificial
+
+#NUEVO COMPARACION
+
+Herramienta Digital para la Gestion y Administracion de Documentos para la Empresa Rutuna Maracay, Edo. Aragua

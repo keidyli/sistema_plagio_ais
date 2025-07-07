@@ -314,7 +314,7 @@ router.get('/reporte-pdf', protectRoute, async (req, res) => {
           p { text-align: center; margin-top: 20px; }
           table { width: 100%; border-collapse: collapse; margin-top: 20px; }
           th, td { border: 1px solid #999; padding: 8px; text-align: center; }
-          th { background: #007BFF; color: white; }
+          th { background: #007BFF; color: black; }
           img.logo { width: 100px; height: auto; }
         </style>
       </head>
