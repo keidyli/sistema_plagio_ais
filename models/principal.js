@@ -70,8 +70,8 @@ module.exports = {
       consultas.nuevo_proyecto,
       [cdi_estu, name_estu, title_project, lineamiento, periodo, name_tutor, contact_tutor],
       (err) => {
-        if (err) return reject(err);  // 👈 esto es lo que faltaba
-        resolve();                     // solo se llama si no hubo error
+        if (err) return reject(err);  
+        resolve();                    
       }
     );
   });

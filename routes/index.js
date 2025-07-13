@@ -15,10 +15,10 @@ const imageSrc = `data:image/jpeg;base64,${base64Image}`;
 
 // Ruta para mostrar la vista de login
 router.get('/', (req, res) => {
-  res.render('index'); // Renderiza index.ejs desde la carpeta views
+  res.render('index'); 
 });
 
-// Ruta para procesar el login y manejar la logica
+// Ruta para procesar login y manejar la logica
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -130,11 +130,11 @@ router.get('/delete/:id', (req, res) => {
   main
     .eliminarProyecto(id)
     .then(() => {
-      res.redirect('/principal?action=delete&success=true'); // Redirigir con acción de eliminar
+      res.redirect('/principal?action=delete&success=true'); 
     })
     .catch(err => {
-      console.error("Error en nuevoProyecto:", err); // Mejorar el logging del error
-      res.redirect('/principal?action=delete&error=1'); // Redirigir con acción de eliminar y error
+      console.error("Error en nuevoProyecto:", err); 
+      res.redirect('/principal?action=delete&error=1'); 
     });
 }); 
 
@@ -418,7 +418,7 @@ router.post('/reportes-Plagio', protectRoute, async (req, res) => {
     res.render('reportesPlagio', {
       mes: mesFormateado,
       anio,
-      nivel, // puedes usarlo en la vista si quieres mostrar qué seleccionó el usuario
+      nivel, 
       datosGrafico: { bajo, medio, alto }
     });
      
@@ -433,8 +433,8 @@ router.post('/reportes-Plagio', protectRoute, async (req, res) => {
 
 // Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
-  res.clearCookie('jwt'); // Eliminar cookie
-  res.redirect('/'); // Redirige al login
+  res.clearCookie('jwt');
+  res.redirect('/');
   console.log("Cerro sesion, el token fue eliminado");
 });
 
